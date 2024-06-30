@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 
 public class CreateNewOpportunityTest extends OpportunityTest {
 	
-	@Test
-	public void createOpportunity() throws InterruptedException
+	@Test(dataProvider = "loginCredentials")
+	public void createOpportunity(String url, String uname, String pwd) throws InterruptedException
 	{
 		clickOpportunity(driver,js);
 		

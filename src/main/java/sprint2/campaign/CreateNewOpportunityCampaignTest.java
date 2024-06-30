@@ -14,8 +14,8 @@ import sprint2.opportunity.OpportunityTest;
 
 public class CreateNewOpportunityCampaignTest extends CampaignTest {
 	
-	@Test
-	public void createNewOpportunity() throws InterruptedException
+	@Test(dataProvider = "loginCredentials")
+	public void createNewOpportunity(String url, String uname, String pwd) throws InterruptedException
 	{
 		clickCampaign();
 		

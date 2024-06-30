@@ -1,8 +1,8 @@
 package sprint2;
 
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
-
+import org.testng.annotations.DataProvider;
+import java.io.IOException;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -24,6 +24,13 @@ public class ProjectSpecificMethod {
 	public JavascriptExecutor js;
 	
 	public WebDriverWait wait;
+	
+	@DataProvider(name="loginCredentials")
+	public Object[][] getLoginCredentialsData() throws IOException
+	
+	{
+		return DataLibrary.readData("SalesforceCredentials");
+	}
 
 	@BeforeClass
 	public void initialization() {
@@ -45,17 +52,16 @@ public class ProjectSpecificMethod {
 
 	}
 
-	@Parameters({ "url", "username", "password" })
 	@BeforeMethod
-	public void preCondition(String url, String uname, String pwd) throws InterruptedException
-
-	{
-
-		login(url, uname, pwd);
+    public void preCondition(Object[] testArgs) throws InterruptedException {
 		
-		launchSalesApp();
-
-	}
+        String url = (String) testArgs[0];
+        String uname = (String) testArgs[1];
+        String pwd = (String) testArgs[2];
+        
+        login(url, uname, pwd);
+        launchSalesApp();
+    }
 
 	public void login(String url, String uname, String pwd) throws InterruptedException {
 		driver.get(url);
@@ -88,6 +94,12 @@ public class ProjectSpecificMethod {
 		Thread.sleep(6000);
 
 	}
+
+	@AfterMethod
+	public void postCondition() throws InterruptedException 
+	{
+           logout();
+	}
 	
 	public void logout() throws InterruptedException
 	{
@@ -97,13 +109,6 @@ public class ProjectSpecificMethod {
 		
 		driver.findElement(By.xpath("//a[text()='Log Out']")).click();
 		
-	}
-	
-
-	@AfterMethod
-	public void postCondition() throws InterruptedException 
-	{
-           logout();
 	}
 
 	@AfterClass
